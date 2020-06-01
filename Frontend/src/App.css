@@ -1,0 +1,16 @@
+body{
+    background-color: rgb(245, 245,245)
+}
+
+.container{
+    margin: 50px auto 0 auto;
+    max-width: 1200px;
+    align-content: center;
+}
+
+.nav-container{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    width: 100%
+}
