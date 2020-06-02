@@ -49,7 +49,11 @@ exports.signup = (req, res) => {
                 email: newUser.email,
                 createdAt: new Date().toISOString(),
                 imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-                userId
+                userId,
+                name:'',
+                phoneNumber:9677885757,
+                bio:'',
+                location:''
             };
 
             db.doc(`/users/${newUser.email}`).set(userCredentials);
@@ -102,8 +106,8 @@ exports.addUserDetails = (req, res) => {
 
     let userDetails = {};
 
-    if (!isEmpty(req.body.bio.trim())) userDetails.bio = req.body.bio;
-    if (!isEmpty(req.body.location.trim())) userDetails.location = req.body.location;
+    userDetails.bio = req.body.bio;
+    userDetails.location = req.body.location;
     userDetails.name = req.body.name;
     userDetails.phoneNumber = req.body.phoneNumber;
 
