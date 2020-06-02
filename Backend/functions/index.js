@@ -23,7 +23,9 @@ const {
     getAuthenticatedUser,
     sendEmail,
     signInGoogle,
-    signUpGoogle
+    signUpGoogle,
+    signInFacebook,
+    signUpFacebook
 } = require('./handlers/users');
 
 const {
@@ -51,8 +53,11 @@ app.post('/job/unlike', FBAuth, unLikeJobs);   //unlike a job
 //users routes
 app.post('/signup', signup);   //sign up
 app.post('/login', login);     //login
-app.post('/signUpGoogle', signUpGoogle); //sign up with google
-app.post('/signInGoogle', signInGoogle); //sign in with google
+app.post('/signUpGoogle', signUpGoogle); //sign up with Google
+app.post('/signInGoogle', signInGoogle); //sign in with Google
+app.post('/signUpFacebook',signUpFacebook); //sign up with Facebook
+app.post('/signInFacebook',signInFacebook); //sign in with Facebook
+
 
 app.post('/user/image', FBAuth, uploadImage)   //upload user image
 app.post('/user', FBAuth, addUserDetails)   //add user info to the profile
