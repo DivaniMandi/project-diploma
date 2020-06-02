@@ -137,9 +137,9 @@ export const sendEmail = (userData, history) => (dispatch) => {
 }
 
 //Sign in with google
-export const signInGoogle = (history) => (dispatch) => {
+export const signInGoogle = (userData, history) => (dispatch) => {
     dispatch({ type: LOADING_UI });
-    axios.post('/signInGoogle')
+    axios.post('/signInGoogle', userData)
         .then((res) => {
             const FBIdToken = `Bearer ${res.data.token}`;
             localStorage.setItem('FBIdToken', FBIdToken);
@@ -157,10 +157,52 @@ export const signInGoogle = (history) => (dispatch) => {
         });
 };
 
-//signup with Google-TODO
-export const signUpGoogle = (history) => (dispatch) => {
+//signup with Google
+export const signUpGoogle = (newUserData, history) => (dispatch) => {
     dispatch({ type: LOADING_UI });
-    axios.post('/signUpGoogle')
+    axios.post('/signUpGoogle', newUserData)
+        .then((res) => {
+            const FBIdToken = `Bearer ${res.data.token}`;
+            localStorage.setItem('FBIdToken', FBIdToken);
+            axios.defaults.headers.common['Authorization'] = FBIdToken;
+            dispatch(getUserData());
+            dispatch({ type: CLEAR_ERRORS });
+            history.push('/');
+        })
+        .catch(err => {
+            dispatch({
+                type: SET_ERRORS,
+                payload: err.response.data
+            })
+
+        });
+} 
+
+//Sign in with Facebook
+export const signInFacebook = (userData, history) => (dispatch) => {
+    dispatch({ type: LOADING_UI });
+    axios.post('/signInFacebook', userData)
+        .then((res) => {
+            const FBIdToken = `Bearer ${res.data.token}`;
+            localStorage.setItem('FBIdToken', FBIdToken);
+            axios.defaults.headers.common['Authorization'] = FBIdToken;
+            dispatch(getUserData());
+            dispatch({ type: CLEAR_ERRORS });
+            history.push('/');
+        })
+        .catch(err => {
+            dispatch({
+                type: SET_ERRORS,
+                payload: err.response.data
+            })
+
+        });
+};
+
+//signup with Facebook
+export const signUpFacebook = (newUserData, history) => (dispatch) => {
+    dispatch({ type: LOADING_UI });
+    axios.post('/signUpFacebook', newUserData)
         .then((res) => {
             const FBIdToken = `Bearer ${res.data.token}`;
             localStorage.setItem('FBIdToken', FBIdToken);
