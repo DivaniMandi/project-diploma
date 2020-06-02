@@ -40,7 +40,6 @@ exports.signup = (req, res) => {
             }
         })
         .then((data) => {
-
             userId = data.user.uid;
             return data.user.getIdToken()
         })
@@ -243,80 +242,147 @@ exports.sendEmail = (req, res) => {
 //user signup with Google
 exports.signUpGoogle = (req, res) => {
 
-    var provider = new firebase.auth.GoogleAuthProvider();
-    let token;
+    let token, userId;
 
-    firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-            db.doc(`/users/${result.user.email}`).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        return res.status(400).json({ email: 'this email is already taken' })
-                    }
-                    else {
-                        const userCredentials = {
-                            email: result.user.email,
-                            createdAt: new Date().toISOString(),
-                            imageUrl: result.user.photoURL,
-                            userId: result.user.uid,
-                        };
+    const newUser = {
+        email: req.body.email,
+        photo: req.body.photoURL,
+        id: req.body.userId,
+        userToken:req.body.token
+    };
 
-                        db.doc(`/users/${result.user.email}`).set(userCredentials);
-                        return result.user.getIdToken();
-                    }
-                })
-                .then((idToken) => {
-                    token = idToken;
-                })
-            return res.status(201).json({ token });;
 
-        })
-        .catch(function (error) {
-
-            if (error.email === 'auth/email-already-in-use') {
-                return res.status(400).json({ email: 'Email is already in use!' })
+    db.doc(`/users/${newUser.email}`).get()
+        .then(doc => {
+            if (doc.exists) {
+                return res.status(400).json({ email: 'this email is already taken' })
             }
             else {
-                return res.status(500).json({ general: 'Something went wrong, please try again' });
+                return newUser;
             }
-        });
+        })
+        .then((data) => {
+            userId = data.id;
+            return data.userToken;
+        })
+        .then((idToken) => {
+            token = idToken;
+            const userCredentials = {
+                email: newUser.email,
+                createdAt: new Date().toISOString(),
+                imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${newUser.photo}?alt=media`,
+                userId
+            };
+
+            db.doc(`/users/${newUser.email}`).set(userCredentials);
+        })
+        .then(() => {
+            res.status(201).json({ token });
+
+        })
 
 };
 
 //user signIn with Google 
 exports.signInGoogle = (req, res) => {
 
-    var provider = new firebase.auth.GoogleAuthProvider();
+    const user = {
+        email: req.body.email,
+        id: req.body.userId,
+        userToken:req.body.token
+    };
 
-    let token;
-
-    firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-            db.doc(`/users/${result.user.email}`).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        return result.user.getIdToken();
-                    }
-                    else {
-                        return res.status(400).json({ email: 'You are not registered, Please sign up!' });
-                    }
-                })
-                .then(idToken => {
-                    token = idToken;
-                })
-            return res.json({ token });
-        })
-        .catch(function (error) {
-
-            if (error.email === 'auth/email-already-in-use') {
-                return res.status(400).json({ email: 'Email is already in use!' })
+    db.doc(`/users/${user.email}`).get()
+        .then(doc => {
+            if (!doc.exists) {
+                return res.status(400).json({ email: 'You are not registered' })
             }
             else {
-                return res.status(500).json({ general: 'You are not registered!' });
+                return user.userToken;
             }
-        });
+        })
+        .then(token => {
+            return res.json({ token });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(403)
+                .json({ general: 'Something went wrong, please try again!' })
+
+        })
+
+};
+
+//user signup with Facebook
+exports.signUpFacebook = (req, res) => {
+
+    let token, userId;
+
+    const newUser = {
+        email: req.body.email,
+        photo: req.body.photoURL,
+        id: req.body.userId,
+        userToken:req.body.token
+    };
+
+
+    db.doc(`/users/${newUser.email}`).get()
+        .then(doc => {
+            if (doc.exists) {
+                return res.status(400).json({ email: 'this email is already taken' })
+            }
+            else {
+                return newUser;
+            }
+        })
+        .then((data) => {
+            userId = data.id;
+            return data.userToken;
+        })
+        .then((idToken) => {
+            token = idToken;
+            const userCredentials = {
+                email: newUser.email,
+                createdAt: new Date().toISOString(),
+                imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${newUser.photo}?alt=media`,
+                userId
+            };
+
+            db.doc(`/users/${newUser.email}`).set(userCredentials);
+        })
+        .then(() => {
+            res.status(201).json({ token });
+
+        })
+
+};
+
+//user signIn with Facebook 
+exports.signInFacebook = (req, res) => {
+
+    const user = {
+        email: req.body.email,
+        id: req.body.userId,
+        userToken:req.body.token
+    };
+
+    db.doc(`/users/${user.email}`).get()
+        .then(doc => {
+            if (!doc.exists) {
+                return res.status(400).json({ email: 'You are not registered' })
+            }
+            else {
+                return user.userToken;
+            }
+        })
+        .then(token => {
+            return res.json({ token });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(403)
+                .json({ general: 'Something went wrong, please try again!' })
+
+        })
+
 };
