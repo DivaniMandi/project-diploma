@@ -104,6 +104,9 @@ exports.addUserDetails = (req, res) => {
 
     if (!isEmpty(req.body.bio.trim())) userDetails.bio = req.body.bio;
     if (!isEmpty(req.body.location.trim())) userDetails.location = req.body.location;
+    userDetails.name = req.body.name;
+    userDetails.phoneNumber = req.body.phoneNumber;
+
 
     db.doc(`/users/${req.user.email}`).update(userDetails)
         .then(() => {
