@@ -25,8 +25,8 @@ const styles = {
     paper: {
         padding: 20
     },
-    toolTip:{
-        marginLeft:500
+    toolTip: {
+        marginLeft: 500
     },
 
     profile: {
@@ -86,10 +86,13 @@ class MyProfile extends Component {
         e.preventDefault();
         this.setState({ clickSave: true })
 
-        const userDetails= {
-            bio:this.state.bio? this.state.bio:this.props.user.credentials.bio,
-            email:this.state.email?this.state.email:this.props.user.credentials.email,
-            location:this.state.location?this.state.location:this.props.user.credentials.location
+        const userDetails = {
+            bio: this.state.bio ? this.state.bio : this.props.user.credentials.bio,
+            email: this.state.email ? this.state.email : this.props.user.credentials.email,
+            location: this.state.location ? this.state.location : this.props.user.credentials.location,
+            name: this.state.name ? this.state.name : this.props.user.credentials.name,
+            phoneNumber: this.state.phoneNumber ? this.state.phonenumber : this.props.user.credentials.phoneNumber,
+
         };
         this.props.editUserDetails(userDetails);
 
@@ -107,10 +110,8 @@ class MyProfile extends Component {
         const image = event.target.files[0];
         const formData = new FormData();
         formData.append('image', image, image.name);
-        this.props.uploadImage(formData);     //<-------TODO fix this-----
+        this.props.uploadImage(formData);     
 
-        /* this.setState({file:
-            URL.createObjectURL(event.target.files[0])}); */
 
     };
 
@@ -123,7 +124,7 @@ class MyProfile extends Component {
 
         const { classes,
             user: {
-                credentials: { email, createdAt, imageUrl, bio, location },
+                credentials: { email, createdAt, imageUrl, bio, location, name, phoneNumber },
                 loading,
                 authenticated
             }
@@ -146,7 +147,8 @@ class MyProfile extends Component {
                             {this.state.bio ? <Typography variant="body2">{this.state.bio}</Typography> :
                                 <Typography variant="body2">{bio}</Typography>}
                             <hr />
-                            {this.state.name ? <Typography variant="body2">{this.state.name}</Typography> : ''}
+                            {this.state.name ? <Typography variant="body2">{this.state.name}</Typography> :
+                                <Typography variant="body2">{name}</Typography>}
                             <hr />
                             {this.state.email ? (
                                 <Fragment>
@@ -179,7 +181,13 @@ class MyProfile extends Component {
                                     <PhoneAndroidIcon color="primary" /> <span>{this.state.phonenumber}</span>
                                     <hr />
                                 </Fragment>
-                            ) : ''}
+                            ) :
+                                (
+                                    <Fragment>
+                                        <PhoneAndroidIcon color="primary" /> <span>{phoneNumber}</span>
+                                        <hr />
+                                    </Fragment>
+                                )}
                             <hr />
                             <CalendarToday color="primary" />{' '}
                             <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
@@ -203,7 +211,7 @@ class MyProfile extends Component {
                             <div className="profile-details">
                                 <FormGroup>
                                     <Label for="name">Name:</Label>
-                                    <Input type="text" name="name" id="name" onChange={this.handleChange} />
+                                    <Input defaultValue={name} type="text" name="name" id="name" onChange={this.handleChange} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="email">Email:</Label>
@@ -211,7 +219,7 @@ class MyProfile extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="phonenumber">Phone Number:</Label>
-                                    <Input type="text" name="phonenumber" id="phonenumber" onChange={this.handleChange} />
+                                    <Input defaultValue={phoneNumber} type="text" name="phonenumber" id="phonenumber" onChange={this.handleChange} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="bio">Bio:</Label>
@@ -238,7 +246,7 @@ class MyProfile extends Component {
             (
                 <Paper className={classes.paper}>
                     <Typography variant="body2" align="center">
-                        No profile found. Please login again
+                        Your session expired. Please sign in again
                 </Typography>
                     <div className={classes.buttons}>
                         <Button variant="contained" color="primary" component={Link} to="/login">Sign in</Button>{'    '}
