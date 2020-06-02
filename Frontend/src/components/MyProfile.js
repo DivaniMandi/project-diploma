@@ -219,7 +219,7 @@ class MyProfile extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="phonenumber">Phone Number:</Label>
-                                    <Input defaultValue={phoneNumber} type="text" name="phonenumber" id="phonenumber" onChange={this.handleChange} />
+                                    <Input defaultValue={`Ex: ${phoneNumber}`} type="text" name="phonenumber" id="phonenumber" onChange={this.handleChange} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="bio">Bio:</Label>
