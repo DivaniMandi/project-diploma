@@ -7,14 +7,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Link } from "react-router-dom";
-//import fire from './Fire';
-//import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 
 
 
 //REDUX components
 import { connect } from 'react-redux';
-import { loginUser, signInGoogle } from '../redux/actions/userActions';
+import { loginUser, signInGoogle, signInFacebook } from '../redux/actions/userActions';
 
 const styles = {
     form: {
@@ -38,6 +37,7 @@ class Login1 extends Component {
         super(props);
         this.login = this.login.bind(this);
         this.signInWithGoogle = this.signInWithGoogle.bind(this);
+        this.signInWithFacebook = this.signInWithFacebook.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
             email: '',
@@ -71,7 +71,51 @@ class Login1 extends Component {
 
     signInWithGoogle(e){
         e.preventDefault();
-        this.props.signInGoogle(this.props.history);
+
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives a Google Access Token. 
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            
+            const userData = {
+                email: user.email,
+                userId:user.uid,
+                token
+            }
+            this.props.signInGoogle(userData,this.props.history);
+
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorMessage = error.message;
+            console.log(errorMessage);
+          });
+
+    } 
+
+    signInWithFacebook(e){
+        e.preventDefault();
+
+        var provider = new firebase.auth.FacebookAuthProvider();        
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives a Google Access Token. 
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            
+            const userData = {
+                email: user.email,
+                userId:user.uid,
+                token
+            }
+            this.props.signInFacebook(userData,this.props.history);
+
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorMessage = error.message;
+            console.log(errorMessage);
+          });
 
     } 
 
@@ -115,7 +159,7 @@ class Login1 extends Component {
                         )}
                         </RaisedButton>
                         <RaisedButton className={classes.button} label="Sign In with Google" type="submit" primary={false} backgroundColor="#dd4b39" onClick={this.signInWithGoogle} />
-                        <RaisedButton className={classes.button} label="Sign In with Facebook" type="submit" primary={false} backgroundColor="#3b5998" />
+                        <RaisedButton className={classes.button} label="Sign In with Facebook" type="submit" primary={false} backgroundColor="#3b5998" onClick={this.signInWithFacebook} />
                         <br/><small>Don't have an account yet?<Link to="/signup"> Register now</Link></small>
                     </Grid>
                     <Grid item sm />
@@ -129,6 +173,7 @@ Login1.propTypes = {
     classes: PropTypes.object.isRequired,
     loginUser: PropTypes.func.isRequired,
     signInGoogle: PropTypes.func.isRequired,
+    signInFacebook:PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     UI: PropTypes.object.isRequired
 };
@@ -140,7 +185,8 @@ const mapStateToProps = (state) => ({
   
   const mapActionsToProps = {
     loginUser,
-    signInGoogle
+    signInGoogle,
+    signInFacebook
   };
 
 
