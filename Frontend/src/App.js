@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwtDecode from 'jwt-decode';
-import Login1 from './components/Login1';
-import Signup1 from './components/Signup1';
-import Home1 from './components/Home1.js';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Home from './components/Home.js';
 import AuthRoute from './util/AuthRoute.js';
 import AppBar from './components/AppBar';
 import './App.css';
@@ -67,13 +67,13 @@ class App extends Component {
             <AppBar />
             <div className="container">
               <Switch>
-                <Route exact path="/" component={Home1} />
+                <Route exact path="/" component={Home} />
                 <Route exact path="/myprofile" component={MyProfile} />
                 <Route exact path="/contactus" component={Contacts} />
                 <Route exact path="/favorites" component={Favorites} />
                 <Route exact path="/search" component={Search} />
-                <AuthRoute exact path="/login" component={Login1} />
-                <AuthRoute exact path="/signup" component={Signup1}/>
+                <AuthRoute exact path="/login" component={Login} />
+                <AuthRoute exact path="/signup" component={Signup}/>
               </Switch>
             </div>
           </Router>
