@@ -120,7 +120,7 @@ class Courses extends React.Component {
             );
         }
 
-        else return ""
+        else return  <p>Found 0 search results</p>
     }
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
