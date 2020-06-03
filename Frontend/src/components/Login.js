@@ -31,7 +31,7 @@ const styles = {
     }
 };
 
-class Login1 extends Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
@@ -169,7 +169,7 @@ class Login1 extends Component {
     }
 }
 
-Login1.propTypes = {
+Login.propTypes = {
     classes: PropTypes.object.isRequired,
     loginUser: PropTypes.func.isRequired,
     signInGoogle: PropTypes.func.isRequired,
@@ -190,4 +190,4 @@ const mapStateToProps = (state) => ({
   };
 
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login1));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login));
