@@ -13,7 +13,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 
-class Home1 extends React.Component {
+class Home extends React.Component {
 
   constructor(props) {
     super(props);
@@ -196,4 +196,4 @@ class Home1 extends React.Component {
   }
 }
 
-export default Home1;
+export default Home;
