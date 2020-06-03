@@ -63,6 +63,7 @@ class Contacts extends Component {
                 <header>
                     <h1>Contact us</h1>
                 </header>
+                <p>We like to hear from you about anything related to our application. Please feel free to contact us.</p>
 
                 <Form onSubmit={this.handleSubmit} style={{ width: '600px', paddingLeft: '50px', paddingTop: '50px' }}>
                     <FormGroup>
